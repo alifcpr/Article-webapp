@@ -1,7 +1,5 @@
-import React from "react";
 import MainLayOut from "./layouts/MainLayOut";
 import { Outlet } from "react-router-dom";
-import useTitle from "./hook/useTitle";
 
 const App = () => {
   return (
