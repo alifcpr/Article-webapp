@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 
-/* Components */
+/* Pages */
 import App from "../App";
-import SignUp from "../pages/SignUp";
+import SignUpPage from "../pages/Auth/SignUpPage";
 import Landing from "../pages/Landing";
+import LoginPage from "../pages/Auth/LoginPage"
 
 export const routes = createBrowserRouter([
   {
@@ -12,7 +13,8 @@ export const routes = createBrowserRouter([
     errorElement: <h1>wrong</h1>,
     children: [
       { path: "/", element: <Landing /> },
-      { path: "/sign-up", element: <SignUp /> },
+      { path: "/sign-up", element: <SignUpPage /> },
+      {path: "/login" , element : <LoginPage /> }
     ],
   },
 ]);
