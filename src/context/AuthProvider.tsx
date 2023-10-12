@@ -1,10 +1,5 @@
 import { createContext, useState } from "react";
-
-type AppContextStateType = {
-  login: boolean;
-  admin: boolean;
-  token: string;
-};
+import { Auth } from "../types/types";
 
 type AuthProviderProps = {
   children?: React.ReactNode;
@@ -12,15 +7,13 @@ type AuthProviderProps = {
 
 const initialContextState = {
   auth: { login: false, admin: false, token: "" },
-  setAuth: (state: AppContextStateType) => {},
+  setAuth: (state: Auth) => {},
 };
 
 export const AuthInfo = createContext(initialContextState);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [auth, setAuth] = useState<AppContextStateType>(
-    initialContextState.auth
-  );
+  const [auth, setAuth] = useState<Auth>(initialContextState.auth);
   return (
     <AuthInfo.Provider value={{ auth, setAuth }}>{children}</AuthInfo.Provider>
   );

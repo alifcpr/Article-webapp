@@ -1,9 +1,9 @@
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { loginApi } from "../services/api";
+import { loginApi } from "../../services/api";
 import { toast } from "react-hot-toast";
-import { Login, getError, User } from "../types/types";
-import useAuth from "./useAuth";
+import { Login, getError, User } from "../../types/types";
+import useAuth from "../useAuth";
 
 const useLoginUser = () => {
   const navigate = useNavigate();

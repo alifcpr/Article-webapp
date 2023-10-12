@@ -7,10 +7,9 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import { SignUp } from "../../types/types";
 /* components */
 import Loading from "../Loading";
-import useSignUpUser from "../../hook/useSignUpUser";
+import useSignUpUser from "../../hook/fetching/useSignUpUser";
 
 const SignUpForm = () => {
-  
   const { isCreating, createUser } = useSignUpUser();
 
   const handleSignUp = ({ name, email, password }: SignUp) => {
@@ -116,7 +115,7 @@ const SignUpForm = () => {
             </span>
             <button
               type="submit"
-              disabled={!formik.isValid}
+              disabled={!formik.isValid || isCreating}
               className={`bg-primary disabled:opacity-80 rounded-lg text-white font-semibold flex items-center justify-center ${
                 isCreating ? "py-4" : "py-3"
               }`}

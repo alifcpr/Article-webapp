@@ -9,7 +9,7 @@ import { Login } from "../../types/types";
 /* components */
 import Loading from "../Loading";
 /* hooks */
-import useLoginUser from "../../hook/useLoginUser";
+import useLoginUser from "../../hook/fetching/useLoginUser";
 
 const LoginForm = () => {
   const { isGetting, getUserInfo } = useLoginUser();
@@ -79,7 +79,7 @@ const LoginForm = () => {
             </span>
             <button
               type="submit"
-              disabled={!formik.isValid}
+              disabled={!formik.isValid || isGetting}
               className={`bg-primary disabled:opacity-80 rounded-lg text-white font-semibold flex items-center justify-center ${
                 isGetting ? "py-4" : "py-3"
               }`}
