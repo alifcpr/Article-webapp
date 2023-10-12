@@ -11,16 +11,19 @@ import { routes } from "./routes/routes.tsx";
 import { QueryClientProvider, QueryClient } from "react-query";
 /*react-hot-toast */
 import { Toaster } from "react-hot-toast";
+import AuthProvider from "./context/AuthProvider.tsx";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Toaster />
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={routes}>
-        <App />
-      </RouterProvider>
-    </QueryClientProvider>
+    <AuthProvider>
+      <Toaster />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={routes}>
+          <App />
+        </RouterProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   </React.StrictMode>
 );

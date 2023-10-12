@@ -23,3 +23,9 @@ export interface User {
   admin: boolean;
   token: string;
 }
+
+export interface Auth {
+  login: boolean;
+  token: string;
+  admin: boolean;
+}
