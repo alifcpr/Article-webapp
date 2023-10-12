@@ -10,7 +10,7 @@ const Header = () => {
         <img src={Logo} alt="Logo" />
       </Link>
       <div className="hidden font-opensans font-semibold text-dark-light xl:flex xl:gap-x-4 xl:items-center">
-        <Link to={"/saf"} className="py-2 px-7">
+        <Link to={"/"} className="py-2 px-7">
           Home
         </Link>
         <div className="py-2 group px-7 flex gap-x-1 cursor-pointer items-center relative">

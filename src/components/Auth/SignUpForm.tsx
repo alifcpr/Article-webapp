@@ -1,5 +1,5 @@
 /* react-router-dom */
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 /* validtion */
 import { signUpValidation } from "../../validation";
 import { Formik, Form, ErrorMessage, Field } from "formik";
@@ -7,28 +7,11 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import { SignUp } from "../../types/types";
 /* components */
 import Loading from "../Loading";
-/* query-client */
-import { useMutation } from "react-query";
-/*Api */
-import { signUpApi } from "../../services/api";
-/*react-hot-toast */
-import { toast } from "react-hot-toast";
+import useSignUpUser from "../../hook/useSignUpUser";
 
 const SignUpForm = () => {
-  const navigate = useNavigate();
-
-  const { isLoading: isCreating, mutate: createUser } = useMutation({
-    mutationFn: ({ name, email, password }: SignUp) =>
-      signUpApi({ name, email, password }),
-    onSuccess: () => {
-      toast.success("Your Account is successfully created !");
-      navigate("/");
-    },
-    onError: (data: any) => {
-      const message = data?.response?.data?.message;
-      toast.error(message);
-    },
-  });
+  
+  const { isCreating, createUser } = useSignUpUser();
 
   const handleSignUp = ({ name, email, password }: SignUp) => {
     createUser({ name, email, password });

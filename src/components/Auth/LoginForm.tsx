@@ -1,33 +1,18 @@
 /* validation */
 import { loginValidation } from "../../validation";
 import { Formik, ErrorMessage, Field, Form } from "formik";
+
+import { Link } from "react-router-dom";
+
 /* types */
 import { Login } from "../../types/types";
-/* react-query */
-import { useMutation } from "react-query";
-/* api */
-import { loginApi } from "../../services/api";
-/* react-hot-toast */
-import { toast } from "react-hot-toast";
-/* react-router-dom */
-import { Link, useNavigate } from "react-router-dom";
 /* components */
 import Loading from "../Loading";
+/* hooks */
+import useLoginUser from "../../hook/useLoginUser";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-
-  const { isLoading: isGetting, mutate: getUserInfo } = useMutation({
-    mutationFn: ({ email, password }: Login) => loginApi({ email, password }),
-    onSuccess: () => {
-      toast.success("welcome back");
-      navigate("/");
-    },
-    onError: (data: any) => {
-      const message = data?.response?.data?.message;
-      toast.error(message);
-    },
-  });
+  const { isGetting, getUserInfo } = useLoginUser();
 
   const handleLogin = ({ email, password }: Login) => {
     getUserInfo({ email, password });
