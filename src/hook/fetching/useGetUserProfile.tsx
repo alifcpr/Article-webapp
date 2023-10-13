@@ -3,7 +3,6 @@ import { getUserProfileApi } from "../../services/api";
 import useAuth from "../useAuth";
 import { User } from "../../types/types";
 const useGetUserProfile = () => {
-
   const { setAuth } = useAuth();
 
   const { data: userProfile } = useQuery({
