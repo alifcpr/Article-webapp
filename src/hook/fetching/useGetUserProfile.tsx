@@ -1,10 +1,17 @@
 import { useQuery } from "react-query";
 import { getUserProfileApi } from "../../services/api";
+import useAuth from "../useAuth";
+import { User } from "../../types/types";
 const useGetUserProfile = () => {
-  const { data } = useQuery({
+
+  const { setAuth } = useAuth();
+
+  const { data: userProfile } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserProfileApi(),
-    onSuccess: () => {
+    onSuccess: (data: User) => {
+      const { admin, token } = data;
+      setAuth({ login: true, admin, token });
       console.log("data", data);
     },
     enabled: !!localStorage.getItem("token"),
