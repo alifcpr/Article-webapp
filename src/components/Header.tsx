@@ -1,13 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 /* Assets */
 import Logo from "../assets/Logo.jpg";
 import useAuth from "../hook/useAuth";
+import { toast } from "react-hot-toast";
 
 const Header = () => {
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
 
-  
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    setAuth({ login: false, admin: false, token: "" });
+    navigate("/");
+    toast.success("You have logged out of your account");
+  };
 
   return (
     <div className="bg-white flex items-center justify-between">
@@ -98,7 +105,7 @@ const Header = () => {
                   <Link to={"/profile"}>Profile</Link>
                 </li>
                 <li>
-                  <Link to={"/logout"}>LogOut</Link>
+                  <button onClick={handleLogOut}>LogOut</button>
                 </li>
               </ul>
             </div>
