@@ -1,5 +1,5 @@
 /* components */
-import Footer from "../components/Footer";
+import Footer from "../components/footer/Footer";
 import Header from "../components/Header";
 
 const MainLayOut = ({ children }: { children: React.ReactElement }) => {
