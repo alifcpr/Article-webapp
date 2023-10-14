@@ -21,3 +21,14 @@ export const getUserProfileApi = async () => {
   const { data } = await axiosPrivate.get("/api/users/profile");
   return data;
 };
+
+export const getAllPostsApi = async (
+  searchKeyword: string = "",
+  page: number = 1,
+  limit: number = 10
+) => {
+  const { data, headers } = await axios.get(
+    `/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`
+  );
+  return data;
+};

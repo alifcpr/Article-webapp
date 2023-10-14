@@ -17,7 +17,7 @@ const LadingInfo = () => {
         <SearchFilter />
         <TagsContainer />
       </div>
-      <div className="col-span-0 md:col-span-0 xl:col-span-6 xl:bg-red-500">
+      <div className="hidden md:block xl:col-span-6 xl:bg-red-500">
         <div>
           <img
             src={LandingPooster}

@@ -2,6 +2,10 @@ import React from "react";
 import BlogCart from "./BlogCart";
 
 const BlogsContainer = () => {
+
+  
+
+
   return (
     <>
       <div className="grid grid-cols-12 gap-6 mt-16">
