@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { getUserProfileApi } from "../../services/api";
 import { User } from "../../types/types";
@@ -6,11 +6,11 @@ import defaultUserProfile from "../../assets/user.png";
 import Loading from "../Loading";
 
 function UserProfileForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [avatar, setAvatar] = useState<string>("");
 
-  const { data: userProfileData, isLoading: isGettingProfile } = useQuery({
+  const { data: userProfileData, isFetching: isGettingProfile } = useQuery({
     queryKey: ["profile"],
     queryFn: () => getUserProfileApi(),
     onSuccess: (data: User) => {

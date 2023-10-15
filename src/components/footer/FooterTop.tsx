@@ -10,7 +10,7 @@ const FooterTop = () => {
         <FooterCart />
         <div className="w-44 h-44 bg-dark-soft rounded-lg absolute -bottom-6 left-14 -z-2"></div>
       </div>
-      <div className="col-span-12 flex flex-col items-center justify-center px-3 gap-y-9 md:mt-5 xl:col-span-6">
+      <div className="col-span-12 flex flex-col items-center justify-center px-3 gap-y-9 md:order-first md:mt-5 xl:col-span-6">
         <h1 className="font-opensan text-slate-200 text-2xl font-bold md:text-4xl md:text-center xl:text-start">
           Get our stories delivered From us to your inbox weekly.
         </h1>

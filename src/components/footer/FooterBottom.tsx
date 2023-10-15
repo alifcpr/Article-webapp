@@ -41,7 +41,7 @@ const FooterBottom = () => {
           </ul>
         </div>
       </div>
-      <div className="col-span-12 flex flex-col items-center justify-center mt-7 md:col-span-4 md:justify-start md:items-start">
+      <div className="col-span-12 flex flex-col items-center justify-center mt-7 md:order-first md:col-span-4 md:justify-start md:items-start">
         <div>
           <svg
             width="77"
