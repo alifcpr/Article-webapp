@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { getUserProfileApi } from "../../services/api";
 import { User } from "../../types/types";
 import defaultUserProfile from "../../assets/user.png";
-import Loading from "../Loading";
+import Loading from "../Loadings/Loading";
 
 function UserProfileForm() {
   const [name, setName] = useState<string>("");

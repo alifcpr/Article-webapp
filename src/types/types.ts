@@ -29,3 +29,40 @@ export interface Auth {
   token: string;
   admin: boolean;
 }
+
+export interface BlogsType {
+  _id: string;
+  title: string;
+  caption: string;
+  slug: string;
+  body: {
+    type: string;
+    content: [
+      {
+        type: string;
+        content: [{ type: string; text: string }];
+      },
+      {
+        type: string;
+        attrs: {
+          src: string;
+          alt: string;
+          title: string;
+        };
+      }
+    ];
+  };
+  photo: string;
+  user: {
+    _id: string;
+    avatar: string;
+    name: string;
+    verified: boolean;
+  };
+  tags: string[];
+  categories: string[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  id: string;
+}

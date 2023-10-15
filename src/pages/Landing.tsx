@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 function Landing() {
   useTitle("Main Page");
   return (
-    <div className="">
+    <div>
       <LadingInfo />
       <BlogsContainer />
     </div>

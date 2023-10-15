@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 /* types */
 import { Login } from "../../types/types";
 /* components */
-import Loading from "../Loading";
+import Loading from "../Loadings/Loading";
 /* hooks */
 import useLoginUser from "../../hook/fetching/useLoginUser";
 

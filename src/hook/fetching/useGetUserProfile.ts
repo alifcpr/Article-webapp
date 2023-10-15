@@ -5,7 +5,11 @@ import { User } from "../../types/types";
 const useGetUserProfile = () => {
   const { setAuth } = useAuth();
 
-  const { data: userProfile } = useQuery({
+  type variableType = {
+    data: User | undefined;
+  };
+
+  const { data: userProfile }: variableType = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserProfileApi(),
     onSuccess: (data: User) => {
@@ -15,6 +19,8 @@ const useGetUserProfile = () => {
     },
     enabled: !!localStorage.getItem("token"),
   });
+
+  return { userProfile };
 };
 
 export default useGetUserProfile;

@@ -6,7 +6,7 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 /* Type */
 import { SignUp } from "../../types/types";
 /* components */
-import Loading from "../Loading";
+import Loading from "../Loadings/Loading";
 import useSignUpUser from "../../hook/fetching/useSignUpUser";
 
 const SignUpForm = () => {

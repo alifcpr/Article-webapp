@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const SearchFilter = () => {
-  const [inputValue, setInputValue] = useState<string>("");
-
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [inputValue, setInputValue] = useState<string>(searchParams.get("searchKeyword") || "");
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -12,9 +13,9 @@ const SearchFilter = () => {
 
   const handleSearch = () => {
     if (inputValue.length > 0) {
-      searchParams.set("search", inputValue);
+      searchParams.set("searchKeyword", inputValue);
     } else {
-      searchParams.delete("search");
+      searchParams.delete("searchKeyword");
     }
     setSearchParams(searchParams);
   };
