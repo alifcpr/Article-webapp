@@ -3,7 +3,8 @@ import axios from "./axios";
 import { Login, SignUp } from "../types/types";
 import axiosPrivate from "./axiosPrivate";
 
-export const signUpApi = async ({ name, email, password }: SignUp) => {
+type SignUpApiType = { name: string; email: string; password: string };
+export const signUpApi = async ({ name, email, password }: SignUpApiType) => {
   const { data } = await axios.post("/api/users/register", {
     name,
     email,
@@ -12,7 +13,8 @@ export const signUpApi = async ({ name, email, password }: SignUp) => {
   return data;
 };
 
-export const loginApi = async ({ email, password }: Login) => {
+type LoginApiType = { email: string; password: string };
+export const loginApi = async ({ email, password }: LoginApiType) => {
   const { data } = await axios.post("/api/users/login", { email, password });
   return data;
 };
@@ -30,5 +32,10 @@ export const getAllPostsApi = async (
   const { data, headers } = await axios.get(
     `/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`
   );
+  return data;
+};
+
+export const updateProfileApi = async ({ userData }: { userData: any }) => {
+  const { data } = await axiosPrivate.put("/api/users/updateProfile", userData);
   return data;
 };

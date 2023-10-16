@@ -1,36 +1,26 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { getUserProfileApi } from "../../services/api";
-import { User } from "../../types/types";
 import defaultUserProfile from "../../assets/user.png";
 import Loading from "../Loadings/Loading";
+import useGetProfileDetail from "../../hook/fetching/useGetProfileDetail";
+import useUpdateProfile from "../../hook/fetching/useUpdateProfile";
 
 function UserProfileForm() {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [avatar, setAvatar] = useState<string>("");
+  const {
+    isGettingProfile,
+    name,
+    setName,
+    password,
+    setPassword,
+    email,
+    setEmail,
+    avatar,
+  } = useGetProfileDetail();
 
-  const { data: userProfileData, isFetching: isGettingProfile } = useQuery({
-    queryKey: ["profile"],
-    queryFn: () => getUserProfileApi(),
-    onSuccess: (data: User) => {
-      const { name, email, avatar } = data;
-      setName(name);
-      setEmail(email);
-      setAvatar(avatar);
-    },
-    enabled: !!localStorage.getItem("token"),
-  });
+  const { updateProfile, updateProfileLoading } = useUpdateProfile();
 
-  if (isGettingProfile) {
-    return (
-      <div className="flex items-center justify-center h-[calc(100vh-10vh)]">
-        <h1 className="font-opensans text-2xl">Loading...</h1>
-      </div>
-    );
-  }
-
-//   const uploadProfileHandler = () => {};
+  const updateHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateProfile({ name, email, password });
+  };
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-10vh)]">
@@ -40,7 +30,10 @@ function UserProfileForm() {
             avatar ? "justify-between" : "justify-center"
           }`}
         >
-          <button className="w-20 h-20 rounded-full">
+          <button
+            disabled={isGettingProfile || updateProfileLoading}
+            className="w-20 h-20 disabled:opacity-80 rounded-full"
+          >
             <img
               src={avatar ? avatar : defaultUserProfile}
               className="w-full h-full object-cover object-center"
@@ -52,7 +45,11 @@ function UserProfileForm() {
             </button>
           ) : null}
         </div>
-        <form className="flex flex-col gap-y-6" autoComplete="off">
+        <form
+          onSubmit={updateHandler}
+          className="flex flex-col gap-y-6"
+          autoComplete="off"
+        >
           <div className="flex flex-col gap-y-2">
             <label htmlFor="name" className=" font-semibold text-dark-light">
               Name
@@ -64,7 +61,7 @@ function UserProfileForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your Name"
-              disabled={isGettingProfile}
+              disabled={isGettingProfile || updateProfileLoading}
               className="border-2 px-5 py-4 text-md font-semibold rounded-lg focus:outline-none focus:border-primary disabled:bg-slate-100"
             />
           </div>
@@ -77,7 +74,7 @@ function UserProfileForm() {
               name="email"
               id="email"
               value={email}
-              disabled={isGettingProfile}
+              disabled={isGettingProfile || updateProfileLoading}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Your Email"
               className="border-2 px-5 py-4 text-md font-semibold rounded-lg focus:outline-none focus:border-primary disabled:bg-slate-100"
@@ -90,15 +87,22 @@ function UserProfileForm() {
             <input
               type="text"
               name="name"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               id="name"
-              disabled={isGettingProfile}
+              disabled={isGettingProfile || updateProfileLoading}
               placeholder="Enter New Password"
               className="border-2 px-5 py-4 text-md font-semibold rounded-lg focus:outline-none focus:border-primary disabled:bg-slate-100"
             />
           </div>
 
-          <button className="bg-primary p-3 rounded-lg text-white font-opensans">
-            Update
+          <button
+            disabled={updateProfileLoading || updateProfileLoading}
+            className={`bg-primary p-3 rounded-lg text-white font-opensans ${
+              updateProfileLoading ? "flex itesm-center justify-center p-4" : ""
+            }`}
+          >
+            {updateProfileLoading ? <Loading /> : "Update"}
           </button>
         </form>
       </div>
