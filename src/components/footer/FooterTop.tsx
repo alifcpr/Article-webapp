@@ -1,8 +1,15 @@
 import React from "react";
 import FooterCart from "./FooterCart";
-
+import { useLocation, useParams } from "react-router-dom";
 
 const FooterTop = () => {
+  const { pathname } = useLocation();
+  const { blogSlug } = useParams();
+
+  if (pathname === `/blog/${blogSlug}`) {
+    return null;
+  }
+
   return (
     <div className="grid grid-cols-12 bg-dark-hard w-full">
       <div className="col-span-12 hidden md:flex md:itesm-center md:justify-center md:relative md:my-10 xl:col-span-6">

@@ -1,10 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import FooterCart from "./FooterCart";
 import FooterTop from "./FooterTop";
 import FooterBottom from "./FooterBottom";
 
 const Footer = () => {
   const { pathname } = useLocation();
+  const { blogSlug } = useParams();
+
   if (
     pathname === "/sign-up" ||
     pathname === "/login" ||
@@ -16,7 +18,7 @@ const Footer = () => {
   return (
     <footer className="">
       <svg
-        className="w-full h-auto max-h-40 translate-y-[1px]"
+        className={`w-full h-auto max-h-40 translate-y-[1px]`}
         preserveAspectRatio="none"
         viewBox="0 0 2160 263"
         fill="none"
