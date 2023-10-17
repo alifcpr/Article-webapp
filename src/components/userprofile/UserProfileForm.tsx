@@ -2,6 +2,10 @@ import defaultUserProfile from "../../assets/user.png";
 import Loading from "../Loadings/Loading";
 import useGetProfileDetail from "../../hook/fetching/useGetProfileDetail";
 import useUpdateProfile from "../../hook/fetching/useUpdateProfile";
+import Modal from "../Modal";
+import { useContext } from "react";
+import { ModalState } from "../../context/ModalStateProvider";
+import useModal from "../../hook/useModal";
 
 function UserProfileForm() {
   const {
@@ -17,6 +21,8 @@ function UserProfileForm() {
 
   const { updateProfile, updateProfileLoading } = useUpdateProfile();
 
+  const { open, setOpen } = useModal();
+
   const updateHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateProfile({ name, email, password });
@@ -24,6 +30,9 @@ function UserProfileForm() {
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-10vh)]">
+      <Modal open={open} onClose={() => setOpen(false)}>
+        adsf
+      </Modal>
       <div className="border-2 flex flex-col gap-y-5 shadow-lg w-[400px] p-4 rounded-lg">
         <div
           className={`flex items-center ${
