@@ -15,7 +15,6 @@ const useGetUserProfile = () => {
     onSuccess: (data: User) => {
       const { admin, token } = data;
       setAuth({ login: true, admin, token });
-      console.log("data", data);
     },
     enabled: !!localStorage.getItem("token"),
   });

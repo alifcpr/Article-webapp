@@ -8,9 +8,6 @@ const App = () => {
   /* check user login */
   useGetUserProfile();
 
-  const test = useContext(ModalState)
-  console.log("this : " , test)
-
   return (
     <div>
       <MainLayOut>

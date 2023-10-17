@@ -23,6 +23,7 @@ const useGetProfileDetail = () => {
         setName(name);
         setEmail(email);
         setAvatar(avatar);
+        console.log(data);
       },
       enabled: !!localStorage.getItem("token"),
       refetchOnWindowFocus: false,

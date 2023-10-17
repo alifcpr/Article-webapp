@@ -12,7 +12,7 @@ type ModalProviderProps = {
 export const ModalState = createContext<ModalStateType | null>(null);
 
 const ModalStateProvider = ({ children }: ModalProviderProps) => {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <ModalState.Provider value={{ open, setOpen }}>

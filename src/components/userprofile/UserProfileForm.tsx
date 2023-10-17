@@ -3,11 +3,18 @@ import Loading from "../Loadings/Loading";
 import useGetProfileDetail from "../../hook/fetching/useGetProfileDetail";
 import useUpdateProfile from "../../hook/fetching/useUpdateProfile";
 import Modal from "../Modal";
-import { useContext } from "react";
-import { ModalState } from "../../context/ModalStateProvider";
 import useModal from "../../hook/useModal";
+import { useRef, useState } from "react";
+import ChangeImage from "./ChangeImage";
+import stables from "../constants/stables";
 
 function UserProfileForm() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [imageFile, setImageFile] = useState<{
+    url: string;
+    file: File;
+  } | null>(null);
+
   const {
     isGettingProfile,
     name,
@@ -28,10 +35,18 @@ function UserProfileForm() {
     updateProfile({ name, email, password });
   };
 
+  const inputImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | undefined = e.target.files?.[0];
+    if (file) {
+      setImageFile({ url: URL.createObjectURL(file), file });
+      setOpen(true)
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-[calc(100vh-10vh)]">
       <Modal open={open} onClose={() => setOpen(false)}>
-        adsf
+        <ChangeImage photo={imageFile!}/>
       </Modal>
       <div className="border-2 flex flex-col gap-y-5 shadow-lg w-[400px] p-4 rounded-lg">
         <div
@@ -40,11 +55,18 @@ function UserProfileForm() {
           }`}
         >
           <button
+            onClick={() => fileInputRef?.current?.click()}
             disabled={isGettingProfile || updateProfileLoading}
-            className="w-20 h-20 disabled:opacity-80 rounded-full"
+            className="w-20 h-20 disabled:opacity-80 rounded-full overflow-hidden"
           >
+            <input
+              ref={fileInputRef}
+              onChange={inputImage}
+              type="file"
+              hidden
+            />
             <img
-              src={avatar ? avatar : defaultUserProfile}
+              src={stables.UPLOAD_FOLDER_BASE_URL + avatar }
               className="w-full h-full object-cover object-center"
             />
           </button>

@@ -5,7 +5,6 @@ import FooterBottom from "./FooterBottom";
 
 const Footer = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
   if (
     pathname === "/sign-up" ||
     pathname === "/login" ||
