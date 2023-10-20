@@ -40,7 +40,19 @@ export const updateProfileApi = async ({ userData }: { userData: any }) => {
   return data;
 };
 
-export const updateProfilePictureApi = async ({ formData }) => {
-  const { data } = await axiosPrivate.put("/api/users/updateProfilePicture", formData);
+export const updateProfilePictureApi = async ({
+  formData,
+}: {
+  formData: any;
+}) => {
+  const { data } = await axiosPrivate.put(
+    "/api/users/updateProfilePicture",
+    formData
+  );
+  return data;
+};
+
+export const getPostByIdApi = async ({ slug }: { slug: string }) => {
+  const { data } = await axios.get(`/api/posts/${slug}`);
   return data;
 };
