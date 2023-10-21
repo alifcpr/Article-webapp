@@ -11,7 +11,7 @@ const Header = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
-    setAuth({ login: false, admin: false, token: "" });
+    setAuth({ login: false, admin: false, token: "", userId: "" });
     navigate("/");
     toast.success("You have logged out of your account");
   };

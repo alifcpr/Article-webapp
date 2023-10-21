@@ -13,8 +13,8 @@ const useGetUserProfile = () => {
     queryKey: ["user"],
     queryFn: () => getUserProfileApi(),
     onSuccess: (data: User) => {
-      const { admin, token } = data;
-      setAuth({ login: true, admin, token });
+      const { admin, token, _id } = data;
+      setAuth({ login: true, admin, token, userId: _id });
     },
     enabled: !!localStorage.getItem("token"),
   });

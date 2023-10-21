@@ -7,7 +7,7 @@ const BlogPage = () => {
   const { blogSlug } = useParams();
 
   return (
-    <div className="mt-28 grid grid-cols-12 p-4 gap-7">
+    <div className="mt-28 grid grid-cols-12  gap-7">
       <BlogDetail />
       <BlogSideBar />
     </div>

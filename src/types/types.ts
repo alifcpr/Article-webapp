@@ -28,6 +28,7 @@ export interface Auth {
   login: boolean;
   token: string;
   admin: boolean;
+  userId: string;
 }
 
 export interface BlogsType {
@@ -65,4 +66,61 @@ export interface BlogsType {
   updatedAt: string;
   __v: number;
   id: string;
+}
+
+export interface replayCommentsType {
+  check: true;
+  createdAt: string;
+  desc: string;
+  id: string;
+  parent: string;
+  replyOnUser: string;
+  updatedAt: string;
+  user: {
+    avatar: string;
+    name: string;
+    _id: string;
+  };
+  __v: 0;
+  _id: string;
+}
+
+export interface CommentType {
+  check: boolean;
+  createdAt: string;
+  desc: string;
+  id: string;
+  parent: string | null;
+  post: string;
+  replies: replayCommentsType[];
+  replyOnUser: string | null;
+  updatedAt: string;
+  user: {
+    avatar: string;
+    name: string;
+    _id: string;
+  };
+  _v: number;
+  _id: string;
+}
+
+export interface BlogDetailType {
+  body: any;
+  caption: string;
+  categories: string[];
+  comments: CommentType[];
+  createdAt: string;
+  id: string;
+  photo: string;
+  slug: string;
+  tags: string[];
+  title: string;
+  updatedAt: string;
+  user: {
+    avatar: string;
+    name: string;
+    _id: string;
+  };
+  _v: number;
+  _id: string;
 }

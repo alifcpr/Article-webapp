@@ -20,9 +20,9 @@ const useSignUpUser = () => {
         signUpApi({ name, email, password }),
 
       onSuccess: (data: User) => {
-        const { admin, token } = data;
+        const { admin, token, _id } = data;
         toast.success(`"${data.name}" Your Account is successfully created !`);
-        setAuth({ admin, token, login: true });
+        setAuth({ admin, token, login: true, userId: _id });
         localStorage.setItem("token", token);
         navigate("/");
       },

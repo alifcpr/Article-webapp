@@ -6,7 +6,7 @@ type AuthProviderProps = {
 };
 
 const initialContextState = {
-  auth: { login: false, admin: false, token: "" },
+  auth: { login: false, admin: false, token: "", userId: "" },
   setAuth: (state: Auth) => {},
 };
 

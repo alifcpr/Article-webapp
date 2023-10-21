@@ -6,7 +6,6 @@ import { Login, getError, User } from "../../types/types";
 import useAuth from "../useAuth";
 
 const useLoginUser = () => {
-  
   type variableType = {
     isLoading: boolean;
     mutate: (data: Login) => void;
@@ -19,9 +18,9 @@ const useLoginUser = () => {
     useMutation({
       mutationFn: ({ email, password }: Login) => loginApi({ email, password }),
       onSuccess: (data: User) => {
-        const { admin, token } = data;
+        const { admin, token, _id } = data;
         toast.success(`Welcome Back "${data.name}"`);
-        setAuth({ admin, token, login: true });
+        setAuth({ admin, token, login: true, userId: _id });
         localStorage.setItem("token", token);
         navigate("/");
       },
