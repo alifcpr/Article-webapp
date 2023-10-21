@@ -19,29 +19,33 @@ const BlogSideBar = () => {
   ];
 
   return (
-    <div className="col-span-12 shadow-2xl p-4 rounded-lg md:col-span-12 xl:col-span-4">
-      <h1 className="font-opensans font-semibold mb-5 md:text-xl xl:text-2xl">
-        Latest Article
-      </h1>
-      <div>
-        {allBlogsLoading ? (
-          <div className="h-[100px] flex items-center justify-center">
-            <Loading_V2 />
-          </div>
-        ) : (
-          <div className="flex flex-col gap-y-8 md:flex-row md:flex-wrap md:gap-x-9">
-            {allBlogs?.map((blog) => (
-              <SideBarCart cartInfo={blog} />
+    <div className="col-span-12 relative  md:col-span-12 xl:col-span-4">
+      <div className="static shadow-2xl p-4 rounded-lg xl:sticky xl:top-20 xl:left-0 ">
+        <h1 className="font-opensans font-semibold mb-5 md:text-xl xl:text-2xl">
+          Latest Article
+        </h1>
+        <div>
+          {allBlogsLoading ? (
+            <div className="h-[100px] flex items-center justify-center">
+              <Loading_V2 />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-y-8 md:flex-row md:flex-wrap md:gap-x-9">
+              {allBlogs?.slice(0, 4)?.map((blog) => (
+                <SideBarCart cartInfo={blog} />
+              ))}
+            </div>
+          )}
+        </div>
+        <div>
+          <h1 className="font-opensans font-semibold my-5 md:text-xl xl:text-2xl">
+            Tags
+          </h1>
+          <div className="flex flex-wrap gap-3 items-center">
+            {tags.map((tag) => (
+              <SideBarBadge>{tag}</SideBarBadge>
             ))}
           </div>
-        )}
-      </div>
-      <div>
-        <h1 className="font-opensans font-semibold my-5 md:text-xl xl:text-2xl">
-          Tags
-        </h1>
-        <div className="flex flex-wrap gap-3 items-center">
-            {tags.map((tag) => <SideBarBadge>{tag}</SideBarBadge>)}
         </div>
       </div>
     </div>

@@ -44,8 +44,9 @@ const BlogDetail = () => {
             className="w-full h-[505px] object-cover object-center"
           />
         </div>
+        <h1 className="font-bold text-3xl my-4 xl:text-4xl">{blogData?.title}</h1>
         <div className="proose ">
-          <Editor content={blogData?.body} editable={true} />
+          <Editor content={blogData?.body} editable={false} />
         </div>
       </div>
     </div>

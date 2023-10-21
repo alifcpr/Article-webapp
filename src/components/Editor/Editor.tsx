@@ -115,7 +115,7 @@ const Editor = ({ setData, content, editable }: EditorProps) => {
         setData(editor?.getJSON());
       }
     },
-    editable: true,
+    editable: editable,
   });
   return (
     <>
