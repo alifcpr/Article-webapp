@@ -4,6 +4,7 @@ import stables from "../constants/stables";
 import { useState } from "react";
 
 const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
+  
   const [replayText, setReplayText] = useState<string>("");
   const [openReplay, setOpenReplay] = useState<boolean>(false);
   const [editText, setEditText] = useState<string | undefined>(

@@ -55,7 +55,7 @@ const BlogDetail = () => {
           <Editor content={blogData?.body} editable={false} />
         </div>
       </div>
-      <AddCommentForm />
+      <AddCommentForm allBlogInfo={blogData} />
       <Comments allComments={blogData?.comments} />
     </div>
   );

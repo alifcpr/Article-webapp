@@ -56,3 +56,23 @@ export const getPostByIdApi = async ({ slug }: { slug: string }) => {
   const { data } = await axios.get(`/api/posts/${slug}`);
   return data;
 };
+
+export const createNewCommentApi = async ({
+  desc,
+  slug,
+  parent,
+  replayOnUser,
+}: {
+  desc: string;
+  slug: string;
+  parent: string | null;
+  replayOnUser: string | null;
+}) => {
+  const { data } = await axiosPrivate.post("/api/comments", {
+    desc,
+    slug,
+    parent,
+    replayOnUser,
+  });
+  return data;
+};
