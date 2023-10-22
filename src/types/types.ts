@@ -68,8 +68,8 @@ export interface BlogsType {
   id: string;
 }
 
-export interface replayCommentsType {
-  check: true;
+export interface replyComments {
+  check: boolean;
   createdAt: string;
   desc: string;
   id: string;
@@ -81,7 +81,7 @@ export interface replayCommentsType {
     name: string;
     _id: string;
   };
-  __v: 0;
+  _v: boolean;
   _id: string;
 }
 
@@ -92,7 +92,7 @@ export interface CommentType {
   id: string;
   parent: string | null;
   post: string;
-  replies: replayCommentsType[];
+  replies: replyComments[];
   replyOnUser: string | null;
   updatedAt: string;
   user: {

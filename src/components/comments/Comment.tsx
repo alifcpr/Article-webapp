@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
 import useAuth from "../../hook/useAuth";
-import { CommentType, replayCommentsType } from "../../types/types";
+import { CommentType } from "../../types/types";
 import stables from "../constants/stables";
 import { useState } from "react";
 import {
@@ -12,7 +12,7 @@ import { toast } from "react-hot-toast";
 import Loading from "../Loadings/Loading";
 import { useParams } from "react-router-dom";
 
-const Comment = ({ commentInfo }: { commentInfo: any }) => {
+const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
   console.log(commentInfo);
 
   /** vars */
@@ -68,6 +68,7 @@ const Comment = ({ commentInfo }: { commentInfo: any }) => {
     onSuccess: () => {
       toast.success("Your reply comment is sent successfully");
       setReplayText("");
+      setOpenReplay(false);
       queryClient.invalidateQueries({
         queryKey: ["blog-detail", slug],
       });
@@ -123,6 +124,7 @@ const Comment = ({ commentInfo }: { commentInfo: any }) => {
               <textarea
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
+                disabled={editCommentLoading}
                 className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary bg-transparent"
               ></textarea>
               <div className="flex justify-end gap-x-4 mt-3">
@@ -243,6 +245,7 @@ const Comment = ({ commentInfo }: { commentInfo: any }) => {
             <textarea
               value={replayText}
               onChange={(e) => setReplayText(e.target.value)}
+              disabled={replyCommentLoading}
               className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary bg-transparent"
               placeholder={`replay to ${commentInfo?.user?.name} uesr`}
             ></textarea>
@@ -255,9 +258,14 @@ const Comment = ({ commentInfo }: { commentInfo: any }) => {
               </button>
               <button
                 onClick={replyCommentHandler}
+                disabled={
+                  editCommentLoading ||
+                  replyCommentLoading ||
+                  deleteCommentLoaidng
+                }
                 className="border text-xs border-blue-500 bg-blue-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-blue-600 hover:border-blue-600 text-white font-opensans md:text-sm"
               >
-                Replay Comment
+                {replyCommentLoading ? <Loading /> : "Reply Comment"}
               </button>
             </div>
           </div>
@@ -273,11 +281,5 @@ const Comment = ({ commentInfo }: { commentInfo: any }) => {
     </div>
   );
 };
-{
-  /* <div className="flex flex-col items-start justify-between">
-            <h1 className="text-sm font-semibold md:text-base xl:text-md">Name</h1>
-            <p className="text-sm text-slate-500 md:text-base xl:text-md">15 December 2020, 11:40 AM</p>
-        </div> */
-}
 
 export default Comment;
