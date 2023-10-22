@@ -76,3 +76,23 @@ export const createNewCommentApi = async ({
   });
   return data;
 };
+
+export const deleteCommentApi = async ({
+  commentId,
+}: {
+  commentId: string;
+}) => {
+  const { data } = await axiosPrivate.delete(`/api/comments/${commentId}`);
+  return data;
+};
+
+export const editCommentApi = async ({
+  desc,
+  commentId,
+}: {
+  desc: string;
+  commentId: string;
+}) => {
+  const { data } = await axiosPrivate.put(`/api/comments/${commentId}`, { desc });
+  return data;
+};

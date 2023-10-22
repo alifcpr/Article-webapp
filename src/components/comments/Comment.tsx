@@ -1,19 +1,99 @@
+import { useMutation, useQueryClient } from "react-query";
 import useAuth from "../../hook/useAuth";
-import { CommentType } from "../../types/types";
+import { CommentType, replayCommentsType } from "../../types/types";
 import stables from "../constants/stables";
 import { useState } from "react";
+import {
+  createNewCommentApi,
+  deleteCommentApi,
+  editCommentApi,
+} from "../../services/api";
+import { toast } from "react-hot-toast";
+import Loading from "../Loadings/Loading";
+import { useParams } from "react-router-dom";
 
-const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
-  
+const Comment = ({ commentInfo }: { commentInfo: any }) => {
+  console.log(commentInfo);
+
+  /** vars */
   const [replayText, setReplayText] = useState<string>("");
   const [openReplay, setOpenReplay] = useState<boolean>(false);
-  const [editText, setEditText] = useState<string | undefined>(
-    commentInfo?.desc
-  );
+  const [editText, setEditText] = useState<string>(commentInfo?.desc);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const { blogSlug: slug } = useParams();
 
+  /* funcs */
   const { auth } = useAuth();
-  console.log("userId : ", auth.userId);
+
+  const queryClient = useQueryClient();
+  const { mutate: deleteComment, isLoading: deleteCommentLoaidng } =
+    useMutation({
+      mutationFn: ({ commentId }: { commentId: string }) =>
+        deleteCommentApi({ commentId }),
+      onSuccess: () => {
+        toast.success("Your comment has been successfully deleted");
+        queryClient.invalidateQueries({
+          queryKey: ["blog-detail", slug],
+        });
+      },
+      onError: () => {
+        toast.error("There is an error , try again");
+      },
+    });
+
+  const { mutate: editComment, isLoading: editCommentLoading } = useMutation({
+    mutationFn: ({ desc, commentId }: { desc: string; commentId: string }) =>
+      editCommentApi({ desc, commentId }),
+    onSuccess: () => {
+      toast.success("Your comment has been successfully updated");
+      queryClient.invalidateQueries({
+        queryKey: ["blog-detail", slug],
+      });
+      setOpenEdit(false);
+    },
+  });
+
+  const { mutate: replyComment, isLoading: replyCommentLoading } = useMutation({
+    mutationFn: ({
+      desc,
+      slug,
+      parent,
+      replayOnUser,
+    }: {
+      desc: string;
+      slug: string | undefined;
+      parent: string | null;
+      replayOnUser: string | null;
+    }) => createNewCommentApi({ desc, slug, parent, replayOnUser }),
+    onSuccess: () => {
+      toast.success("Your reply comment is sent successfully");
+      setReplayText("");
+      queryClient.invalidateQueries({
+        queryKey: ["blog-detail", slug],
+      });
+    },
+    onError: () => {
+      toast.error("there is an error , try again");
+    },
+  });
+
+  const deleteCommentHandler = () => {
+    deleteComment({ commentId: commentInfo?.id });
+  };
+
+  const editCommentHandler = () => {
+    editComment({ desc: editText, commentId: commentInfo?.id });
+    console.log("run here");
+  };
+
+  const replyCommentHandler = () => {
+    replyComment({
+      desc: replayText,
+      parent: !!commentInfo?.parent ? commentInfo?.parent : commentInfo?._id,
+      slug,
+      replayOnUser: commentInfo?._id,
+    });
+  };
 
   return (
     <div className="flex gap-x-4 w-full bg-gray-100 rounded-lg mt-3 p-3">
@@ -52,8 +132,11 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
                 >
                   Cancel
                 </button>
-                <button className="border border-blue-500 bg-blue-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-blue-600 hover:border-blue-600 text-white font-opensans">
-                  Update Comment
+                <button
+                  onClick={editCommentHandler}
+                  className="font-opensans disabled:bg-opacity-80 border-2 p-2 rounded-lg bg-primary text-white transition-all duration-300 font-semibold text-sm border-primary hover:bg-transparent hover:text-black "
+                >
+                  {editCommentLoading ? <Loading /> : "Update Comment"}
                 </button>
               </div>
             </div>
@@ -65,7 +148,15 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
 
           {auth.login ? (
             <div className="flex gap-x-7 mt-5 font-opensans">
-              <button onClick={() => setOpenReplay(prev => !prev)} className="flex gap-x-1 items-center hover:text-primary text-sm md:text-base">
+              <button
+                disabled={
+                  deleteCommentLoaidng ||
+                  editCommentLoading ||
+                  replyCommentLoading
+                }
+                onClick={() => setOpenReplay((prev) => !prev)}
+                className="flex gap-x-1 items-center hover:text-primary disabled:hover:text-black disabled:hover:cursor-not-allowed text-sm disabled:bg-opacity-70 md:text-base"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -84,8 +175,13 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
               </button>
               {auth.userId === commentInfo?.user?._id ? (
                 <button
+                  disabled={
+                    deleteCommentLoaidng ||
+                    editCommentLoading ||
+                    replyCommentLoading
+                  }
                   onClick={() => setOpenEdit((prev) => !prev)}
-                  className="flex gap-x-1 items-center hover:text-slate-500 text-sm md:text-base"
+                  className="flex gap-x-1 items-center hover:text-slate-500 disabled:hover:text-black disabled:hover:cursor-not-allowed  disabled:bg-opacity-70 text-sm md:text-base"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,48 +201,74 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
                 </button>
               ) : null}
               {auth.userId === commentInfo?.user?._id ? (
-                <button className="flex gap-x-1 items-center hover:text-red-500 text-sm md:text-base">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 md:w-6 md:h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                    />
-                  </svg>
-                  <span className="font-semibold">Delete</span>
+                <button
+                  disabled={
+                    deleteCommentLoaidng ||
+                    editCommentLoading ||
+                    replyCommentLoading
+                  }
+                  onClick={deleteCommentHandler}
+                  className={`flex gap-x-1 items-center hover:text-red-500 disabled:hover:text-black disabled:hover:cursor-not-allowed  disabled:bg-opacity-70 text-sm md:text-base ${
+                    deleteCommentLoaidng && "bg-red-500 p-2 rounded-md"
+                  }`}
+                >
+                  {deleteCommentLoaidng ? (
+                    <Loading />
+                  ) : (
+                    <>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5 md:w-6 md:h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                      <span className="font-semibold">Delete</span>
+                    </>
+                  )}
                 </button>
               ) : null}
             </div>
           ) : null}
         </div>
         {openReplay ? (
-         <div className="w-full">
-         <textarea
-           value={replayText}
-           onChange={(e) => setReplayText(e.target.value)}
-           className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary bg-transparent"
-           placeholder={`replay to ${commentInfo?.user?.name} uesr`}
-         ></textarea>
-         <div className="flex justify-end gap-x-4 mt-3">
-           <button
-             onClick={() => setOpenReplay((prev) => !prev)}
-             className="border border-red-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-red-500 hover:text-white text-red-500 font-opensans"
-           >
-             Cancel
-           </button>
-           <button className="border border-blue-500 bg-blue-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-blue-600 hover:border-blue-600 text-white font-opensans">
-             Replay Comment
-           </button>
-         </div>
-       </div>
+          <div className="w-full">
+            <textarea
+              value={replayText}
+              onChange={(e) => setReplayText(e.target.value)}
+              className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary bg-transparent"
+              placeholder={`replay to ${commentInfo?.user?.name} uesr`}
+            ></textarea>
+            <div className="flex justify-end gap-x-4 mt-3">
+              <button
+                onClick={() => setOpenReplay((prev) => !prev)}
+                className="border text-xs border-red-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-red-500 hover:text-white text-red-500 font-opensans md:text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={replyCommentHandler}
+                className="border text-xs border-blue-500 bg-blue-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-blue-600 hover:border-blue-600 text-white font-opensans md:text-sm"
+              >
+                Replay Comment
+              </button>
+            </div>
+          </div>
         ) : null}
+        <div>
+          <div>
+            {commentInfo?.replies?.map((comment) => (
+              <Comment commentInfo={comment} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
