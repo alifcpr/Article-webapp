@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import useDrawer from "../hook/useDrawer";
 import Logo from "../assets/Logo.jpg";
+import useClickOutSide from "../hook/useClickOutSide";
 
 const Drawer = () => {
   const { openDrawer, setOpenDrawer } = useDrawer();
+
+  const ref = useClickOutSide(setOpenDrawer);
 
   return (
     <div
@@ -12,6 +15,7 @@ const Drawer = () => {
       } xl:hidden`}
     >
       <div
+        ref={ref}
         className={`absolute w-2/3 h-full transition-all duration-300 bg-white shadow-2xl ${
           openDrawer ? "right-0 top-0" : "-right-full top-0"
         } md:w-1/2`}
