@@ -3,7 +3,7 @@ import useDrawer from "../hook/useDrawer";
 import Logo from "../assets/Logo.jpg";
 import useClickOutSide from "../hook/useClickOutSide";
 
-const Drawer = () => {
+const Drawer = ({ children }: { children: React.ReactNode }) => {
   const { openDrawer, setOpenDrawer } = useDrawer();
 
   const ref = useClickOutSide(setOpenDrawer);
@@ -16,11 +16,11 @@ const Drawer = () => {
     >
       <div
         ref={ref}
-        className={`absolute w-2/3 h-full transition-all duration-300 bg-white shadow-2xl ${
+        className={`absolute w-2/3 flex flex-col gap-y-4 h-full transition-all duration-300 px-2 py-3 md:px-3 md:py-4" bg-white shadow-2xl ${
           openDrawer ? "right-0 top-0" : "-right-full top-0"
         } md:w-1/2`}
       >
-        <div className="flex justify-between items-center px-2 py-3 md:px-3 md:py-4">
+        <div className="flex justify-between items-center">
           <img src={Logo} alt="Logo" className="scale-75 md:scale-90" />
           <button onClick={() => setOpenDrawer(false)}>
             <svg
@@ -39,6 +39,7 @@ const Drawer = () => {
             </svg>
           </button>
         </div>
+        <div className="px-3 h-full">{children}</div>
       </div>
     </div>
   );

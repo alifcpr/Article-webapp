@@ -6,6 +6,7 @@ import useAuth from "../hook/useAuth";
 import { toast } from "react-hot-toast";
 import useDrawer from "../hook/useDrawer";
 import Drawer from "./Drawer";
+import MobileMenu from "./MobileMenu";
 
 const Header = () => {
   const { openDrawer, setOpenDrawer } = useDrawer();
@@ -21,12 +22,12 @@ const Header = () => {
 
   const openDarwerHandler = () => {
     setOpenDrawer((prev) => !prev);
-    console.log("open darwer : " , openDrawer)
+    console.log("open darwer : ", openDrawer);
   };
 
   return (
-    <div className="bg-white  fixed left-0 top-0 w-full z-50">
-      <Drawer /> 
+    <div className="bg-white fixed left-0 top-0 w-full z-50">
+      <MobileMenu />
       <div className="max-w-sm flex items-center justify-between sm:max-w-xl md:max-w-2xl xl:max-w-7xl mx-auto p-3">
         <Link to={"/"} className="flex-1">
           <img src={Logo} alt="Logo" />

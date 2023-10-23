@@ -2,7 +2,7 @@ import { useEffect , useRef } from "react";
 
 const useClickOutSide = (onClose: React.Dispatch<React.SetStateAction<boolean>>) => {
 
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
