@@ -66,6 +66,7 @@ const AddCommentForm = ({ allBlogInfo }: AddCommentFormProps) => {
         submitFunc={() => createCommentHandler()}
         value={commentText}
         type="Add_Comment"
+        placeHolderText="Write Your Comment"
       />
     </div>
   );

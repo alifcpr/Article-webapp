@@ -4,8 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.jpg";
 import useAuth from "../hook/useAuth";
 import { toast } from "react-hot-toast";
+import useDrawer from "../hook/useDrawer";
+import Drawer from "./Drawer";
 
 const Header = () => {
+  const { openDrawer, setOpenDrawer } = useDrawer();
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
 
@@ -16,8 +19,14 @@ const Header = () => {
     toast.success("You have logged out of your account");
   };
 
+  const openDarwerHandler = () => {
+    setOpenDrawer((prev) => !prev);
+    console.log("open darwer : " , openDrawer)
+  };
+
   return (
     <div className="bg-white  fixed left-0 top-0 w-full z-50">
+      <Drawer /> 
       <div className="max-w-sm flex items-center justify-between sm:max-w-xl md:max-w-2xl xl:max-w-7xl mx-auto p-3">
         <Link to={"/"} className="flex-1">
           <img src={Logo} alt="Logo" />
@@ -113,7 +122,7 @@ const Header = () => {
             </div>
           ) : null}
         </div>
-        <div className="block xl:hidden">
+        <button onClick={openDarwerHandler} className="block xl:hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -128,7 +137,7 @@ const Header = () => {
               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
             />
           </svg>
-        </div>
+        </button>
       </div>
     </div>
   );

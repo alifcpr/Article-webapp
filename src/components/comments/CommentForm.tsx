@@ -1,5 +1,5 @@
 import Loading from "../Loadings/Loading";
-import {useRef , useEffect} from "react"
+import { useRef, useEffect } from "react";
 
 type CommentFormProps = {
   btnLabel: string;
@@ -10,6 +10,7 @@ type CommentFormProps = {
   changeValueFunc: React.Dispatch<React.SetStateAction<string>>;
   loadingState: boolean;
   showForm?: boolean;
+  placeHolderText: string;
   changeShowFromState?: React.Dispatch<React.SetStateAction<boolean>> | null;
 };
 const CommentForm = ({
@@ -21,20 +22,20 @@ const CommentForm = ({
   changeValueFunc,
   loadingState,
   showForm,
+  placeHolderText,
   changeShowFromState,
 }: CommentFormProps) => {
-
-  const inputRef = useRef<HTMLTextAreaElement | null>(null)
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    showForm && inputRef.current?.focus()
-  } , [showForm])
+    showForm && inputRef.current?.focus();
+  }, [showForm]);
 
   return (
     <div className="w-full">
       <textarea
         className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary"
-        placeholder="Wrtie Your Comment"
+        placeholder={placeHolderText}
         value={value}
         disabled={loadingState}
         onChange={(e) => changeValueFunc(e.target.value)}

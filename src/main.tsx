@@ -13,6 +13,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "./context/AuthProvider.tsx";
 import ModalStateProvider from "./context/ModalStateProvider.tsx";
+import DrawerStateProvider from "./context/DrawerStateProvider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,11 +22,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <Toaster />
       <QueryClientProvider client={queryClient}>
-        <ModalStateProvider>
-          <RouterProvider router={routes}>
-            <App />
-          </RouterProvider>
-        </ModalStateProvider>
+        <DrawerStateProvider>
+          <ModalStateProvider>
+            <RouterProvider router={routes}>
+              <App />
+            </RouterProvider>
+          </ModalStateProvider>
+        </DrawerStateProvider>
       </QueryClientProvider>
     </AuthProvider>
   </React.StrictMode>

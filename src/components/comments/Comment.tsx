@@ -38,6 +38,12 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
 
   useEffect(() => {
     /* handle commentForm open state */
+    if (openEdit) {
+      setOpenReplay(false);
+    }
+    if (openReplay) {
+      setOpenEdit(false)
+    }
   }, [openEdit, openReplay]);
 
   /* handler funcs */
@@ -97,6 +103,7 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
               }
               changeShowFromState={setOpenEdit}
               showForm={openEdit}
+              placeHolderText="Edit Your Comment"
             />
           ) : (
             <p className="mt-2 font-opensans text-slate-700 text-justify text-sm md:text-base">
@@ -209,6 +216,7 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
             }
             changeShowFromState={setOpenReplay}
             showForm={openReplay}
+            placeHolderText={`Reply To ${commentInfo?.user?.name}`}
           />
         )}
         <div>
