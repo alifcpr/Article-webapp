@@ -1,4 +1,5 @@
 import Loading from "../Loadings/Loading";
+import {useRef , useEffect} from "react"
 
 type CommentFormProps = {
   btnLabel: string;
@@ -8,6 +9,7 @@ type CommentFormProps = {
   submitFunc: () => void;
   changeValueFunc: React.Dispatch<React.SetStateAction<string>>;
   loadingState: boolean;
+  showForm?: boolean;
   changeShowFromState?: React.Dispatch<React.SetStateAction<boolean>> | null;
 };
 const CommentForm = ({
@@ -18,8 +20,16 @@ const CommentForm = ({
   value = "",
   changeValueFunc,
   loadingState,
+  showForm,
   changeShowFromState,
 }: CommentFormProps) => {
+
+  const inputRef = useRef<HTMLTextAreaElement | null>(null)
+
+  useEffect(() => {
+    showForm && inputRef.current?.focus()
+  } , [showForm])
+
   return (
     <div className="w-full">
       <textarea
@@ -28,6 +38,7 @@ const CommentForm = ({
         value={value}
         disabled={loadingState}
         onChange={(e) => changeValueFunc(e.target.value)}
+        ref={inputRef}
       ></textarea>
       <div className="flex gap-x-4 mt-2 justify-end items-center">
         {showCancel && changeShowFromState && (

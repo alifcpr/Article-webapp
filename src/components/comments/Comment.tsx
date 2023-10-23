@@ -1,7 +1,7 @@
 import useAuth from "../../hook/useAuth";
 import { CommentType } from "../../types/types";
 import stables from "../constants/stables";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loading from "../Loadings/Loading";
 import { useParams } from "react-router-dom";
 import useDeleteComment from "../../hook/commentsApiHook/useDeleteComment";
@@ -24,10 +24,21 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
   /* context */
   const { auth } = useAuth();
 
-  /* api hook funcs */
+  /* hooks  */
   const { deleteComment, deleteCommentLoaidng } = useDeleteComment();
-  const { editComment, editCommentLoading } = useEditComment();
-  const { replyComment, replyCommentLoading } = useReplyComment();
+  const { editComment, editCommentLoading, completeEditComment } =
+    useEditComment();
+  const { replyComment, replyCommentLoading, completeReplyComment } =
+    useReplyComment();
+
+  useEffect(() => {
+    completeEditComment && setOpenEdit(false);
+    completeReplyComment && setOpenReplay(false);
+  }, [completeEditComment, completeReplyComment]);
+
+  useEffect(() => {
+    /* handle commentForm open state */
+  }, [openEdit, openReplay]);
 
   /* handler funcs */
   const deleteCommentHandler = () => {
@@ -85,6 +96,7 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
                 deleteCommentLoaidng
               }
               changeShowFromState={setOpenEdit}
+              showForm={openEdit}
             />
           ) : (
             <p className="mt-2 font-opensans text-slate-700 text-justify text-sm md:text-base">
@@ -196,6 +208,7 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
               editCommentLoading || replyCommentLoading || deleteCommentLoaidng
             }
             changeShowFromState={setOpenReplay}
+            showForm={openReplay}
           />
         )}
         <div>
