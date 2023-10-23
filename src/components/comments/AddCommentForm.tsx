@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "react-query";
 import { createNewCommentApi } from "../../services/api";
 import { BlogDetailType } from "../../types/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loading from "../Loadings/Loading";
 import { toast } from "react-hot-toast";
 import Landing from "../../pages/Landing";
 import useAuth from "../../hook/useAuth";
+import CommentForm from "./CommentForm";
 
 type AddCommentFormProps = {
   allBlogInfo: BlogDetailType | undefined;
@@ -50,32 +51,22 @@ const AddCommentForm = ({ allBlogInfo }: AddCommentFormProps) => {
         parent: null,
         replayOnUser: null,
       });
-    }
-    else {
-      toast.error("You must create an account to comment")
+    } else {
+      toast.error("You must create an account to comment");
     }
   };
 
-
   return (
     <div className="mt-6 border p-3 shadow-lg rounded-lg flex flex-col gap-y-4">
-      <textarea
-        className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary"
-        placeholder="Wrtie Your Comment"
+      <CommentForm
+        btnLabel="Add Comment"
+        changeValueFunc={setCommentText}
+        loadingState={createCommentLoading}
+        showCancel={false}
+        submitFunc={() => createCommentHandler()}
         value={commentText}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-          setCommentText(e.target.value)
-        }
-      ></textarea>
-      <div className="flex justify-end items-center">
-        <button
-          onClick={createCommentHandler}
-          disabled={createCommentLoading}
-          className="font-opensans disabled:bg-opacity-80 border-2 p-2 rounded-lg bg-primary text-white transition-all duration-300 font-semibold text-sm border-primary hover:bg-transparent hover:text-black "
-        >
-          {createCommentLoading ? <Loading /> : "Add Comment"}
-        </button>
-      </div>
+        type="Add_Comment"
+      />
     </div>
   );
 };

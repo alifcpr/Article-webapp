@@ -6,14 +6,13 @@ const Comments = ({
 }: {
   allComments: CommentType[] | undefined;
 }) => {
-  console.log(allComments);
 
   const repliesCount = allComments?.reduce((per, curr) => {
     return curr.replies.length + per;
   }, 0);
 
   const calculateAllComments = allComments!.length + repliesCount!;
-  console.log(calculateAllComments)
+  console.log(calculateAllComments);
 
   return (
     <div className="mt-6 border p-2 shadow-lg rounded-lg">

@@ -1,83 +1,35 @@
-import { useMutation, useQueryClient } from "react-query";
 import useAuth from "../../hook/useAuth";
 import { CommentType } from "../../types/types";
 import stables from "../constants/stables";
 import { useState } from "react";
-import {
-  createNewCommentApi,
-  deleteCommentApi,
-  editCommentApi,
-} from "../../services/api";
-import { toast } from "react-hot-toast";
 import Loading from "../Loadings/Loading";
 import { useParams } from "react-router-dom";
+import useDeleteComment from "../../hook/commentsApiHook/useDeleteComment";
+import useEditComment from "../../hook/commentsApiHook/useEditComment";
+import useReplyComment from "../../hook/commentsApiHook/useReplyComment";
+import CommentForm from "./CommentForm";
 
 const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
   console.log(commentInfo);
 
-  /** vars */
+  /* vars */
   const [replayText, setReplayText] = useState<string>("");
   const [openReplay, setOpenReplay] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(commentInfo?.desc);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
+
+  /* url Params */
   const { blogSlug: slug } = useParams();
 
-  /* funcs */
+  /* context */
   const { auth } = useAuth();
 
-  const queryClient = useQueryClient();
-  const { mutate: deleteComment, isLoading: deleteCommentLoaidng } =
-    useMutation({
-      mutationFn: ({ commentId }: { commentId: string }) =>
-        deleteCommentApi({ commentId }),
-      onSuccess: () => {
-        toast.success("Your comment has been successfully deleted");
-        queryClient.invalidateQueries({
-          queryKey: ["blog-detail", slug],
-        });
-      },
-      onError: () => {
-        toast.error("There is an error , try again");
-      },
-    });
+  /* api hook funcs */
+  const { deleteComment, deleteCommentLoaidng } = useDeleteComment();
+  const { editComment, editCommentLoading } = useEditComment();
+  const { replyComment, replyCommentLoading } = useReplyComment();
 
-  const { mutate: editComment, isLoading: editCommentLoading } = useMutation({
-    mutationFn: ({ desc, commentId }: { desc: string; commentId: string }) =>
-      editCommentApi({ desc, commentId }),
-    onSuccess: () => {
-      toast.success("Your comment has been successfully updated");
-      queryClient.invalidateQueries({
-        queryKey: ["blog-detail", slug],
-      });
-      setOpenEdit(false);
-    },
-  });
-
-  const { mutate: replyComment, isLoading: replyCommentLoading } = useMutation({
-    mutationFn: ({
-      desc,
-      slug,
-      parent,
-      replayOnUser,
-    }: {
-      desc: string;
-      slug: string | undefined;
-      parent: string | null;
-      replayOnUser: string | null;
-    }) => createNewCommentApi({ desc, slug, parent, replayOnUser }),
-    onSuccess: () => {
-      toast.success("Your reply comment is sent successfully");
-      setReplayText("");
-      setOpenReplay(false);
-      queryClient.invalidateQueries({
-        queryKey: ["blog-detail", slug],
-      });
-    },
-    onError: () => {
-      toast.error("there is an error , try again");
-    },
-  });
-
+  /* handler funcs */
   const deleteCommentHandler = () => {
     deleteComment({ commentId: commentInfo?.id });
   };
@@ -91,7 +43,7 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
     replyComment({
       desc: replayText,
       parent: !!commentInfo?.parent ? commentInfo?.parent : commentInfo?._id,
-      slug,
+      slug: slug!,
       replayOnUser: commentInfo?._id,
     });
   };
@@ -120,28 +72,20 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
             </p>
           </div>
           {openEdit ? (
-            <div className="w-full">
-              <textarea
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                disabled={editCommentLoading}
-                className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary bg-transparent"
-              ></textarea>
-              <div className="flex justify-end gap-x-4 mt-3">
-                <button
-                  onClick={() => setOpenEdit((prev) => !prev)}
-                  className="border border-red-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-red-500 hover:text-white text-red-500 font-opensans"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={editCommentHandler}
-                  className="font-opensans disabled:bg-opacity-80 border-2 p-2 rounded-lg bg-primary text-white transition-all duration-300 font-semibold text-sm border-primary hover:bg-transparent hover:text-black "
-                >
-                  {editCommentLoading ? <Loading /> : "Update Comment"}
-                </button>
-              </div>
-            </div>
+            <CommentForm
+              btnLabel="Edit Comment"
+              type="Edit_Comment"
+              showCancel={true}
+              value={editText}
+              submitFunc={editCommentHandler}
+              changeValueFunc={setEditText}
+              loadingState={
+                editCommentLoading ||
+                replyCommentLoading ||
+                deleteCommentLoaidng
+              }
+              changeShowFromState={setOpenEdit}
+            />
           ) : (
             <p className="mt-2 font-opensans text-slate-700 text-justify text-sm md:text-base">
               {commentInfo.desc}
@@ -175,7 +119,7 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
                 </svg>
                 <span className="font-semibold">Reply</span>
               </button>
-              {auth.userId === commentInfo?.user?._id ? (
+              {auth.userId === commentInfo?.user?._id && (
                 <button
                   disabled={
                     deleteCommentLoaidng ||
@@ -201,8 +145,8 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
                   </svg>
                   <span className="font-semibold">Edit</span>
                 </button>
-              ) : null}
-              {auth.userId === commentInfo?.user?._id ? (
+              )}
+              {auth.userId === commentInfo?.user?._id && (
                 <button
                   disabled={
                     deleteCommentLoaidng ||
@@ -236,40 +180,24 @@ const Comment = ({ commentInfo }: { commentInfo: CommentType }) => {
                     </>
                   )}
                 </button>
-              ) : null}
+              )}
             </div>
           ) : null}
         </div>
-        {openReplay ? (
-          <div className="w-full">
-            <textarea
-              value={replayText}
-              onChange={(e) => setReplayText(e.target.value)}
-              disabled={replyCommentLoading}
-              className="w-full border-2 rounded-lg font-opensans p-2 focus:outline-primary bg-transparent"
-              placeholder={`replay to ${commentInfo?.user?.name} uesr`}
-            ></textarea>
-            <div className="flex justify-end gap-x-4 mt-3">
-              <button
-                onClick={() => setOpenReplay((prev) => !prev)}
-                className="border text-xs border-red-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-red-500 hover:text-white text-red-500 font-opensans md:text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={replyCommentHandler}
-                disabled={
-                  editCommentLoading ||
-                  replyCommentLoading ||
-                  deleteCommentLoaidng
-                }
-                className="border text-xs border-blue-500 bg-blue-500 px-4 py-1 rounded-md transition-all duration-150 hover:bg-blue-600 hover:border-blue-600 text-white font-opensans md:text-sm"
-              >
-                {replyCommentLoading ? <Loading /> : "Reply Comment"}
-              </button>
-            </div>
-          </div>
-        ) : null}
+        {openReplay && (
+          <CommentForm
+            btnLabel="Reply Comment"
+            type="Reply_Comment"
+            showCancel={true}
+            value={replayText}
+            submitFunc={replyCommentHandler}
+            changeValueFunc={setReplayText}
+            loadingState={
+              editCommentLoading || replyCommentLoading || deleteCommentLoaidng
+            }
+            changeShowFromState={setOpenReplay}
+          />
+        )}
         <div>
           <div>
             {commentInfo?.replies?.map((comment) => (

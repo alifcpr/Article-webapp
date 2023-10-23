@@ -27,8 +27,7 @@ const BlogDetail = () => {
     queryKey: ["blog-detail", blogSlug],
     queryFn: () => getPostByIdApi({ slug: blogSlug! }),
   });
-
-  console.log(blogData);
+  
 
   if (blogLoading) {
     return (
@@ -38,9 +37,15 @@ const BlogDetail = () => {
     );
   }
 
+  const breadCrumbRoutes = [
+    {href: "/" , label: "Home"},
+    {href: "/blog" , label: "blog"},
+    {href: `/blog/${blogData?.slug}` , label: `${blogData?.title}`},
+  ]
+
   return (
     <div className="col-span-12 md:col-span-12 xl:col-span-8">
-      <BreadCrumb />
+      <BreadCrumb breadCrumbRoutes={breadCrumbRoutes}/>
       <div className="border px-4 shadow-lg py-3 rounded-lg">
         <div className="w-full rounded-lg overflow-hidden">
           <img
