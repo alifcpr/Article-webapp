@@ -7,6 +7,10 @@ The admin panel is not fully finished and only works to edit and delete articles
 It is not possible to view the project online, the backend file of the project has not been uploaded to the server due to some problems.
 and project is fully responsive
 
+
+
+https://github.com/alifcpr/Article-webapp/assets/71038253/dc8842e9-c85a-4c0d-993b-a25c8069ed64
+
 ![main page](https://github.com/alifcpr/Article-webapp/assets/71038253/e7de614a-754b-4e7b-89a1-f3723d54eb21)
 ![blog page](https://github.com/alifcpr/Article-webapp/assets/71038253/39888c2b-a870-40d4-830c-bf0e63f2d9cb)
 ![user page](https://github.com/alifcpr/Article-webapp/assets/71038253/25d43da5-11ed-405f-8664-249e477194b4)
